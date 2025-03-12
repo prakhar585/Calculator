@@ -13,22 +13,28 @@ function App() {
   }
 
   const handleEqualsClick=()=>{
-    try {
-      if (display.trim() === '') {
-        setAnswer('Error');
-        return;
+    const handleEqualsClick = () => {
+      try {
+        if (display.trim() === '' || /[+\-*/]$/.test(display)) {
+          setAnswer('Error');
+          return;
+        }
+    
+        let ans = eval(display);
+    
+        // Handle division by zero cases
+        if (ans === Infinity) {
+          setAnswer('Infinity');
+        } else if (isNaN(ans)) {
+          setAnswer('NaN');
+        } else {
+          setAnswer(ans.toString()); // Ensure answer is displayed correctly
+        }
+      } catch (error) {
+        setAnswer('Error'); // Catch any other unexpected errors
       }
-  
-      let ans = eval(display);
-      
-      if (isNaN(ans) || !isFinite(ans)) {
-        setAnswer('Error');
-      } else {
-        setAnswer(ans);
-      }
-    } catch (error) {
-      setAnswer('Error');
-    }
+    };
+    
   } 
 
   const handleClearClick=()=>{
