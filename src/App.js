@@ -8,39 +8,35 @@ function App() {
   const handleNumberClick=(num)=>{
     setDisplay((prevValue)=>prevValue+num);
   }
-  const handleOperatorClick=(operator)=>{
-    setDisplay((prevValue)=>prevValue+operator);
-  }
+  const handleOperatorClick = (operator) => {
+    // Prevent adding an operator if display is empty (except for negative sign)
+    // or if the last character is already an operator
+    if (display === '' && operator !== '-') return;
+    if (/[+\-*/]$/.test(display)) return;
+    setDisplay((prev) => prev + operator);
+  };
+  
 
-  const handleEqualsClick=()=>{
-    const handleEqualsClick = () => {
-      try {
-        if (display.trim() === '' || /[+\-*/]$/.test(display)) {
-          setAnswer('Error');
-          return;
-        }
-    
-        let ans = eval(display);
-    
-        // Handle division by zero cases
-        if (ans === Infinity) {
-          setAnswer('Infinity');
-        } else if (isNaN(ans)) {
-          setAnswer('NaN');
-        } else {
-          setAnswer(ans.toString()); // Ensure answer is displayed correctly
-        }
-      } catch (error) {
-        setAnswer('Error'); // Catch any other unexpected errors
-      }
-    };
-    
-  } 
+  const handleEqualsClick = () => {
+    // If display is empty or ends with an operator, it's an incomplete expression
+    if (display === '' || /[+\-*/]$/.test(display)) {
+      setAnswer('Error');
+      return;
+    }
+    try {
+      const result = eval(display);
+      setAnswer(result.toString());
+    } catch (error) {
+      setAnswer('Error');
+    }
+  };
+
 
   const handleClearClick=()=>{
     setDisplay('');
     setAnswer('');
   }
+
 
   return (
     <div className="calculator">
